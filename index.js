@@ -30,8 +30,22 @@ async function setWord(word) {
     }
 }
 
-async function getNewLetter(c) {
-    
+async function getNewLetter(n) {
+    lib.letterReset();
+    const buttons = await driver.findElements(By.className(`lettre-mal-place`));
+    for (let i = 0; i < buttons.length; i++) {
+        let name = await buttons[i].getText();
+        lib.setknowNotPos(name);
+    }
+    const buttons3 = await driver.findElements(By.className(`lettre-non-trouve`));
+    for (let u = 0; u < buttons3.length; u++) {
+        let name = await buttons3[u].getText();
+        lib.setNotletter(name);
+    }
+    for (let l = 0; l < len(); l++) {
+        
+    }
+    lib.prunt();
 }
 
 
@@ -44,12 +58,52 @@ async function getNewLetter(c) {
        const firstLetter = await driver.findElement(By.css('#grille > table > tr > td')).getText();
        lib.addLetterKnowPos(0,firstLetter);
        await lib.init_words();
-       const word = lib.getRandomWord();
+       let word = lib.getRandomWord();
        await setWord(word);
        console.log(`The choosen word is : "${word}"`);
        await ENTER();
-       getNewLetter(1);
-
+       await sleep(2000); //wait 10s
+       await getNewLetter(1);
+       //====
+       lib.WordsListFilter();
+       word = lib.getRandomWord();
+       console.log(`The choosen word is : "${word}"`);
+       await setWord(word);
+       await ENTER();
+       await sleep(2000);
+       await getNewLetter(2);
+       //===
+       lib.WordsListFilter();
+       word = lib.getRandomWord();
+       console.log(`The choosen word is : "${word}"`);
+       await setWord(word);
+       await ENTER();
+       await sleep(2000);
+       await getNewLetter(3);
+       //====
+       lib.WordsListFilter();
+       word = lib.getRandomWord();
+       console.log(`The choosen word is : "${word}"`);
+       await setWord(word);
+       await ENTER();
+       await sleep(2000);
+       await getNewLetter(4);
+       //====
+       lib.WordsListFilter();
+       word = lib.getRandomWord();
+       console.log(`The choosen word is : "${word}"`);
+       await setWord(word);
+       await ENTER();
+       await sleep(2000);
+       await getNewLetter(5);
+       //===
+       lib.WordsListFilter();
+       word = lib.getRandomWord();
+       console.log(`The choosen word is : "${word}"`);
+       await setWord(word);
+       await ENTER();
+       await sleep(2000);
+       await getNewLetter(6);
     } finally {
        //await driver.quit();
     }

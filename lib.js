@@ -1,7 +1,6 @@
 const fetch = require('node-fetch');
 const fs = require('fs')
 
-notAcceptLetter = ['é','è','â','ï','î','ê','û','ô'];
 knowPos = [];
 knowNotPos = [];
 NotPosOnHere = [];
@@ -9,15 +8,33 @@ notOnTheWord = [];
 words = [];
 wordlen = 0;
 
+function letterReset() {
+    knowNotPos = [];
+    notOnTheWord = [];
+}
+
+function setNotletter(letter) {
+    notOnTheWord.push(letter);
+}
+
+function setknowNotPos(letter) {
+    knowNotPos.push(letter);
+}
+
+function setNotPosletter(letter,n) {
+    NotPosOnHere[n] = letter;
+}
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
 
+
 function prunt() {
-    for (let i = 0; i < words.length; i++) {
-        console.log(words[i])
-    }
+    console.log('knowPos:',knowPos);
+    console.log('knowNotPos:',knowNotPos);
+    console.log('NotPosOnHere:',NotPosOnHere);
+    console.log('notOnTheWord:',notOnTheWord);
 }
 
 function init(l) {
@@ -51,11 +68,42 @@ async function init_words() {
 }
 
 function WordsListFilter() {
-
+    newList = []
+    let good = true;
+    for (let u = 0; u < words.length; u++) {
+        good = true;
+        //console.log(words[u],'▼');
+        for (let i = 0; i < wordlen; i++) {
+            if (knowPos[i] != '*') {
+               if (words[u][i] != knowPos[i]) {
+                   good = false;
+                   //console.log('>>>','not pos');
+               }
+            }
+            if (NotPosOnHere[i] != '*'){
+                if (words[u][i] == NotPosOnHere[i]) {
+                    good = false;
+                    //console.log('>>>','notposhere');
+                }
+            }
+            for (let z =0; z < knowNotPos.length; z++) {
+                if (words[u][i] == notOnTheWord[z]) {
+                    good = false;
+                    //console.log('>>>','wrong letter');
+                }
+            }
+        }
+        if (good) {
+            newList.push(words[u]);
+        } 
+    }
+    words = newList;
+    //console.table(words);
+    console.log(`words numbers: ${words.length}`);
 }
 
 function getRandomWord() {
-    const u = getRandomInt(wordlen);
+    const u = getRandomInt(words.length);
     return words[u];
 }
 
@@ -63,8 +111,13 @@ function getRandomWord() {
 
 module.exports = {
     init,
+    prunt,
     init_words,
     WordsListFilter,
+    letterReset,
     addLetterKnowPos,
-    getRandomWord
+    getRandomWord,
+    setNotletter,
+    setNotPosletter,
+    setknowNotPos
 }
